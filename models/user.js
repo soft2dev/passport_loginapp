@@ -33,7 +33,6 @@ module.exports.createUser = function(newUser, callback){
 }
 
 module.exports.getUserByEmail = function(email, callback) {
-    //console.log('getUserByUsername',email);
     let query = {email: email};
     User.findOne(query, callback);
 }

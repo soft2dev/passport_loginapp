@@ -26,7 +26,6 @@ router.post('/register', function(req, res) {
   let password = req.body.password;
   let password2 = req.body.password2;
 
-  //console.log(name);
   // Validation
   req.checkBody('name', 'Name is required').notEmpty();
   req.checkBody('email', 'Email is required').notEmpty();
@@ -42,7 +41,6 @@ router.post('/register', function(req, res) {
     });
   } else {
       User.getUserByEmail(email,function(err, user){
-        console.log('user',user);
         if(err) throw err;
         if(user){
           req.flash('error_msg', 'Email is invalid or already taken.');
@@ -59,7 +57,6 @@ router.post('/register', function(req, res) {
 
           User.createUser(newUser, function(err, user){
             if(err) throw err;
-            console.log(user);
             const output = `
               <h3>Verify your email address to complete registration</h3>
               <br>
@@ -90,7 +87,7 @@ router.post('/register', function(req, res) {
             // send mail with defined transport object
             transporter.sendMail(mailOptions, (err,info) => {
                 if (err) {
-                    return console.log(err);
+                    return err;
                 }
                 console.log("Message sent: %s", info.messageId);
                 // Preview only available when sending through an Ethereal account
@@ -111,7 +108,6 @@ passport.use(new LocalStrategy({
   },
   function(username, password, done) {
     User.getUserByEmail(username,function(err, user){
-      console.log(user);
       if(err) throw err;
       if(!user){
         return done(null,false, {message: 'Unkown User'})
@@ -155,7 +151,6 @@ router.get('/logout', function(req, res) {
     res.redirect('/users/login');
   });
 router.get('/auth', function(req, res) {
-      console.log('auth',req.query.email,req.query.token);
   User.getUserByEmail(req.query.email,function(err, user){
     if(err) throw err;
     try{
